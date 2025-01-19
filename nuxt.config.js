@@ -69,12 +69,9 @@ export default {
       }
     }
   },
-  ssr: true,
-
-  // Target: static or server
-  target: 'static',
-  buildDir: 'dist',
+  ssr: false,  // SSR'yi kapatın çünkü statik mod kullanıyorsunuz
+  target: 'static',  
   generate: {
-    dir: 'dist'
+    dir: 'dist'  // Statik dosyalar dist dizinine üretilecek
   }
 }
