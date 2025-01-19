@@ -1,0 +1,53 @@
+// Colors
+$primary-color: #0f0;
+$accent-color: #0ff;
+$background-dark: #000913;
+$background-darker: #000306;
+$neon-glow-primary: rgba(0, 255, 0, 0.2);
+$neon-glow-accent: rgba(0, 255, 255, 0.2);
+$color-border: rgba(0, 255, 136, 0.2);
+
+// Neon shadows
+$neon-shadow-primary: 
+  0 0 5px rgba(0, 255, 0, 0.5),
+  0 0 10px rgba(0, 255, 0, 0.3),
+  0 0 15px rgba(0, 255, 0, 0.2);
+
+$neon-shadow-accent: 
+  0 0 5px rgba(0, 255, 255, 0.5),
+  0 0 10px rgba(0, 255, 255, 0.3),
+  0 0 15px rgba(0, 255, 255, 0.2);
+
+// Dimensions
+$header-height: 80px;
+$race-info-width: 300px;
+$border-radius: (
+  "small": 4px,
+  "medium": 8px,
+  "large": 16px
+);
+
+// Typography
+$font-sizes: (
+  "small": 0.875rem,
+  "base": 1rem,
+  "large": 1.25rem,
+  "xl": 1.5rem,
+  "xxl": 2rem
+);
+
+// Animation
+$transition-speed: (
+  "fast": 0.2s,
+  "normal": 0.3s,
+  "slow": 0.5s
+);
+
+// Breakpoints
+$breakpoints: (
+  "small": 480px,
+  "medium": 768px,
+  "large": 1024px,
+  "xlarge": 1200px
+);
+

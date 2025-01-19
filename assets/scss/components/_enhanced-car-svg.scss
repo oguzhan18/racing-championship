@@ -1,0 +1,49 @@
+.car-svg {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.car-body {
+  transform-origin: center center;
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes speedLine {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(15px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+
+@keyframes particle {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-20px, 0);
+  }
+}
+
+.effects {
+  animation: effectsPulse 1s ease-in-out infinite;
+}
+
+@keyframes effectsPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+}

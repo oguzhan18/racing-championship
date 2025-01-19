@@ -1,0 +1,570 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.modal-content {
+  width: 95%;
+  max-width: 1200px;
+  height: 95vh;
+  background: linear-gradient(135deg, #0a1a2c 0%, #001832 100%);
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: 1024px) {
+    overflow-y: hidden;
+  }
+
+  @media (max-width: 1023px) {
+    overflow-y: auto;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(0, 255, 255, 0.1), transparent 70%);
+    pointer-events: none;
+  }
+}
+
+.racing-bg-effects {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+
+  .speed-lines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 50px,
+                    rgba(0, 255, 255, 0.03) 50px,
+                    rgba(0, 255, 255, 0.03) 51px
+    );
+    animation: speedLines 2s linear infinite;
+  }
+
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+            linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    transform: perspective(500px) rotateX(45deg);
+    transform-origin: top;
+    animation: gridMove 20s linear infinite;
+  }
+
+  .glow-orbs {
+    position: absolute;
+    inset: 0;
+    background:
+            radial-gradient(circle at 20% 20%, rgba(0, 255, 255, 0.1), transparent 40%),
+            radial-gradient(circle at 80% 80%, rgba(0, 255, 136, 0.1), transparent 40%);
+    animation: orbPulse 5s ease-in-out infinite alternate;
+  }
+}
+
+.racing-container {
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 1023px) {
+    padding: 1.5rem;
+  }
+
+  @media (max-width: 767px) {
+    padding: 1rem;
+  }
+}
+
+.racing-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  @media (min-width: 1024px) {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.logo-container {
+  display: inline-block;
+  position: relative;
+  padding: 0.5rem;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 2px solid rgba(0, 255, 255, 0.2);
+
+    @media (min-width: 1024px) {
+      width: 80px;
+      height: 80px;
+    }
+  }
+
+  &::before {
+    top: 0;
+    left: 0;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  &::after {
+    bottom: 0;
+    right: 0;
+    border-left: none;
+    border-top: none;
+  }
+}
+
+.racing-logo {
+  margin: 0;
+  line-height: 1;
+
+  .logo-text {
+    display: block;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 2px;
+    position: relative;
+
+    &.primary {
+      font-size: 2rem;
+      background: linear-gradient(180deg, #fff, #0f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 15px rgba(0, 255, 0, 0.5));
+
+      @media (min-width: 1024px) {
+        font-size: 2.5rem;
+      }
+    }
+
+    &.accent {
+      font-size: 2.5rem;
+      background: linear-gradient(180deg, #fff, #0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.5));
+      margin-top: -0.5rem;
+
+      @media (min-width: 1024px) {
+        font-size: 3rem;
+      }
+    }
+  }
+}
+
+.logo-accent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+  .line {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #0ff, transparent);
+
+    @media (min-width: 1024px) {
+      width: 80px;
+    }
+  }
+
+  .dot {
+    width: 4px;
+    height: 4px;
+    background: #0ff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #0ff;
+
+    @media (min-width: 1024px) {
+      width: 6px;
+      height: 6px;
+    }
+  }
+}
+
+.racing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-grow: 1;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+.racing-panel {
+  background: rgba(0, 13, 26, 0.5);
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  border-radius: 15px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+
+    @media (min-width: 1024px) {
+      padding: 1.25rem;
+    }
+
+    .icon-badge {
+      width: 32px;
+      height: 32px;
+      background: rgba(0, 255, 255, 0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+
+      @media (min-width: 1024px) {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+    }
+
+    h2 {
+      color: #0ff;
+      font-size: 1.2rem;
+      margin: 0;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+
+      @media (min-width: 1024px) {
+        font-size: 1.4rem;
+      }
+    }
+  }
+
+  .panel-content {
+    padding: 1rem;
+
+    @media (min-width: 1024px) {
+      padding: 1.25rem;
+    }
+  }
+}
+
+.feature-list {
+  display: grid;
+  gap: 0.75rem;
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    background: rgba(0, 255, 255, 0.05);
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateX(5px);
+      background: rgba(0, 255, 255, 0.1);
+    }
+
+    .feature-icon {
+      position: relative;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @media (min-width: 1024px) {
+        width: 36px;
+        height: 36px;
+      }
+
+      .hex-bg {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 255, 255, 0.1);
+        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      }
+
+      .icon {
+        position: relative;
+        z-index: 1;
+        font-size: 1rem;
+
+        @media (min-width: 1024px) {
+          font-size: 1.1rem;
+        }
+      }
+    }
+
+    .feature-text {
+      color: #fff;
+      font-size: 0.85rem;
+
+      @media (min-width: 1024px) {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+.stats-grid {
+  display: grid;
+  gap: 1rem;
+
+  .stat-item {
+    .stat-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+
+      .stat-icon {
+        width: 24px;
+        height: 24px;
+        background: rgba(0, 255, 255, 0.1);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+
+        @media (min-width: 1024px) {
+          width: 28px;
+          height: 28px;
+          font-size: 1rem;
+        }
+      }
+
+      .stat-label {
+        color: #0ff;
+        font-size: 0.85rem;
+        font-weight: 500;
+
+        @media (min-width: 1024px) {
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    .stat-bar-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .stat-bar {
+        flex: 1;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
+
+        .stat-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #0ff, #0f0);
+          transition: width 1s ease-out;
+        }
+      }
+
+      .stat-value {
+        color: #fff;
+        font-size: 0.75rem;
+        font-family: monospace;
+        min-width: 2.5em;
+
+        @media (min-width: 1024px) {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
+
+.step-list {
+  display: grid;
+  gap: 1rem;
+
+  .step-item {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(0, 255, 255, 0.05);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(0, 255, 255, 0.1);
+      transform: translateX(5px);
+    }
+
+    .step-number {
+      width: 28px;
+      height: 28px;
+      background: rgba(0, 255, 255, 0.1);
+      border: 2px solid rgba(0, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: #0ff;
+      font-weight: bold;
+
+      @media (min-width: 1024px) {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+      }
+    }
+
+    .step-info {
+      h3 {
+        color: #0ff;
+        font-size: 0.95rem;
+        margin: 0 0 0.25rem;
+
+        @media (min-width: 1024px) {
+          font-size: 1rem;
+        }
+      }
+
+      p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.8rem;
+        margin: 0;
+
+        @media (min-width: 1024px) {
+          font-size: 0.85rem;
+        }
+      }
+    }
+  }
+}
+
+.racing-footer {
+  text-align: center;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.start-button {
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  bottom: 1em;
+
+  @media (min-width: 1024px) {
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+  }
+
+  .button-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #0ff, #0f0);
+    opacity: 0.8;
+    transition: all 0.3s ease;
+  }
+
+  .button-text {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .button-shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.3),
+                    transparent
+    );
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+
+    .button-bg {
+      opacity: 1;
+      filter: brightness(1.2);
+    }
+
+    .button-shine {
+      transform: translateX(100%);
+    }
+  }
+}
+
+@keyframes speedLines {
+  from { transform: translateX(0); }
+  to { transform: translateX(51px); }
+}
+
+@keyframes gridMove {
+  from { transform: perspective(500px) rotateX(45deg) translateY(0); }
+  to { transform: perspective(500px) rotateX(45deg) translateY(20px); }
+}
+
+@keyframes orbPulse {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}

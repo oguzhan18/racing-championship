@@ -1,0 +1,155 @@
+@use './variables' as v;
+@use './mixins' as m;
+@use 'sass:map';
+
+.race-info {
+  position: fixed;
+  top: v.$header-height;
+  right: 0;
+  width: v.$race-info-width;
+  height: calc(100vh - #{v.$header-height});
+  transform: translateX(100%);
+  transition: transform map.get(v.$transition-speed, normal) ease-in-out;
+  @include m.glass-effect;
+  z-index: 10;
+
+  &.visible {
+    transform: translateX(0);
+  }
+
+  .info-header {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(v.$primary-color, 0.2);
+
+    .title {
+      font-size: map.get(v.$font-sizes, large);
+      color: v.$primary-color;
+      margin: 0;
+      @include m.neon-glow(v.$primary-color, 0.5);
+    }
+
+    .lap-counter {
+      font-size: map.get(v.$font-sizes, small);
+      color: v.$accent-color;
+      margin-top: 0.5rem;
+    }
+  }
+
+  .lap-results {
+    height: calc(100% - 60px);
+    overflow-y: auto;
+
+    .lap-card {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(v.$primary-color, 0.1);
+
+      .lap-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+
+        .lap-number {
+          color: v.$primary-color;
+          font-size: map.get(v.$font-sizes, base);
+        }
+
+        .lap-time {
+          color: v.$accent-color;
+          font-family: monospace;
+        }
+      }
+
+      .winner-section {
+        background: rgba(v.$primary-color, 0.1);
+        border-radius: map.get(v.$border-radius, medium);
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+
+        .winner-label {
+          color: rgba(v.$primary-color, 0.7);
+          font-size: map.get(v.$font-sizes, small);
+          margin-bottom: 0.5rem;
+        }
+
+        .winner-info {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+
+          .car-color {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+          }
+
+          .car-details {
+            .car-name {
+              color: white;
+              font-weight: bold;
+            }
+
+            .car-time {
+              color: v.$accent-color;
+              font-size: map.get(v.$font-sizes, small);
+            }
+          }
+        }
+      }
+
+      .results-grid {
+        display: grid;
+        gap: 0.5rem;
+
+        .result-row {
+          display: grid;
+          grid-template-columns: auto 1fr auto;
+          align-items: center;
+          gap: 1rem;
+          padding: 0.5rem;
+          background: rgba(white, 0.05);
+          border-radius: map.get(v.$border-radius, small);
+
+          .position {
+            width: 24px;
+            height: 24px;
+            @include m.flex-center;
+            background: rgba(v.$primary-color, 0.1);
+            border-radius: 50%;
+            color: v.$primary-color;
+            font-size: map.get(v.$font-sizes, small);
+          }
+
+          .car-info {
+            .car-name {
+              color: white;
+              font-size: map.get(v.$font-sizes, small);
+            }
+
+            .car-speed {
+              color: v.$accent-color;
+              font-size: map.get(v.$font-sizes, small);
+            }
+          }
+
+          .finish-time {
+            color: v.$accent-color;
+            font-family: monospace;
+            font-size: map.get(v.$font-sizes, small);
+          }
+        }
+      }
+    }
+  }
+
+  @include m.responsive(tablet) {
+    width: 100%;
+    height: 50vh;
+    transform: translateY(100%);
+    bottom: 0;
+    top: auto;
+
+    &.visible {
+      transform: translateY(0);
+    }
+  }
+}

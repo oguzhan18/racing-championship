@@ -1,0 +1,56 @@
+@use '../variables' as v;
+@use '../mixins' as m;
+@use 'sass:map';
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(v.$background-darker, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(v.$primary-color, 0.2);
+
+  .logo {
+    .title {
+      margin: 0;
+      line-height: 1;
+    }
+
+    .neon-text {
+      display: block;
+
+      &.primary {
+        font-size: map.get(v.$font-sizes, xxl);
+        @include m.neon-text(v.$primary-color, v.$neon-shadow-primary);
+      }
+
+      &.accent {
+        font-size: map.get(v.$font-sizes, xl);
+        @include m.neon-text(v.$accent-color, v.$neon-shadow-accent);
+      }
+    }
+  }
+
+  .control-panel {
+    display: flex;
+    gap: 1rem;
+  }
+}
+
+@include m.responsive(tablet) {
+  .game-header {
+    flex-direction: column;
+    padding: 1rem;
+
+    .logo {
+      margin-bottom: 1rem;
+    }
+
+    .control-panel {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+}
+

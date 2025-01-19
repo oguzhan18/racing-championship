@@ -1,0 +1,993 @@
+.race-program {
+  background: linear-gradient(135deg, rgba(0, 13, 26, 0.95), rgba(0, 26, 52, 0.95));
+  border-radius: 20px;
+  overflow: hidden;
+  height: calc(100vh - 160px);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.program-header {
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+
+    .title {
+      color: #0f0;
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 0;
+      text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+
+    .lap-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      .current-lap {
+        color: #fff;
+        font-size: 1.2rem;
+        font-weight: 500;
+      }
+
+      .distance {
+        color: #0ff;
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .progress-container {
+    position: relative;
+
+    .progress-bar {
+      height: 4px;
+      background: rgba(0, 255, 136, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+
+      .progress {
+        height: 100%;
+        background: #0f0;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        transition: width 0.3s ease;
+      }
+    }
+
+    .progress-markers {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+
+      .marker {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+
+        &.completed {
+          background: #0f0;
+          box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+      }
+    }
+  }
+}
+
+.race-completion-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background: linear-gradient(180deg,
+          rgba(1, 10, 20, 0.98),
+          rgba(2, 14, 31, 0.98)
+  );
+  padding: 2rem;
+  overflow-y: auto;
+  animation: fadeIn 0.5s ease-out;
+
+  .trophy-animation {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    pointer-events: none;
+
+    .trophy-glow {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(
+                      circle at center,
+                      rgba(255, 215, 0, 0.1) 0%,
+                      transparent 70%
+      );
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+
+    .trophy-icon {
+      font-size: 150px;
+      opacity: 0.1;
+      animation: floatTrophy 3s ease-in-out infinite;
+    }
+  }
+
+  .completion-header {
+    position: relative;
+    text-align: center;
+    margin-bottom: 3rem;
+    z-index: 1;
+
+    .title-container {
+      display: inline-block;
+
+      .completion-title {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin: 0;
+
+        .text-line {
+          font-size: 4rem;
+          font-weight: 800;
+          color: #0f0;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          line-height: 1;
+          text-shadow:
+                  0 0 20px rgba(0, 255, 0, 0.5),
+                  0 0 40px rgba(0, 255, 0, 0.3);
+          animation: glowPulse 2s ease-in-out infinite alternate;
+        }
+      }
+
+      .title-decoration {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1rem;
+
+        .line {
+          width: 100px;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #0f0, transparent);
+        }
+
+        .dot {
+          width: 6px;
+          height: 6px;
+          background: #0f0;
+          border-radius: 50%;
+          box-shadow: 0 0 10px #0f0;
+        }
+      }
+    }
+  }
+
+  .results-container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+    max-width: 1800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+
+    .section-header {
+      margin-bottom: 2rem;
+
+      h2 {
+        color: #0f0;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+      }
+
+      .stats {
+        display: flex;
+        gap: 2rem;
+
+        .stat-item {
+          .label {
+            color: #666;
+            font-size: 0.9rem;
+            display: block;
+          }
+
+          .value {
+            color: #0ff;
+            font-size: 1.2rem;
+            font-family: monospace;
+          }
+        }
+      }
+    }
+
+    .program-section {
+      .cars-grid {
+        display: grid;
+        gap: 1rem;
+
+        .car-card {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 12px;
+          padding: 1rem;
+          animation: slideIn 0.5s ease-out backwards;
+          animation-delay: var(--delay);
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+          }
+
+          .car-preview {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .car-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            .car-indicator {
+              width: 4px;
+              height: 24px;
+              border-radius: 2px;
+            }
+
+            .details {
+              .name {
+                color: #fff;
+                font-weight: 500;
+                margin-bottom: 0.25rem;
+                display: block;
+              }
+
+              .speed {
+                color: #0ff;
+                font-size: 0.9rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .results-section {
+      .results-grid {
+        display: grid;
+        gap: 1.5rem;
+
+        .result-card {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 12px;
+          padding: 1.5rem;
+          animation: slideIn 0.5s ease-out backwards;
+          animation-delay: var(--delay);
+          transition: all 0.3s ease;
+
+          &:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.08);
+          }
+
+          &.winner {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+
+            .position-indicator {
+              .position-number {
+                background: #FFD700;
+                color: #000;
+              }
+            }
+          }
+
+          .position-indicator {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+
+            .position-number {
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: rgba(0, 255, 136, 0.2);
+              border-radius: 50%;
+              color: #0f0;
+              font-weight: bold;
+              font-size: 1.2rem;
+            }
+
+            .position-bar {
+              height: 4px;
+              background: rgba(0, 255, 136, 0.3);
+              border-radius: 2px;
+              transition: width 0.3s ease;
+            }
+          }
+
+          .result-content {
+            display: grid;
+            gap: 1.5rem;
+
+            .car-details {
+              display: flex;
+              align-items: center;
+              gap: 1rem;
+
+              .info {
+                .name {
+                  color: #fff;
+                  font-size: 1.2rem;
+                  margin-bottom: 0.25rem;
+                }
+
+                .speed {
+                  color: #0ff;
+                  font-size: 1rem;
+                }
+              }
+            }
+
+            .lap-times {
+              background: rgba(0, 0, 0, 0.3);
+              border-radius: 8px;
+              padding: 1rem;
+
+              .times-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 1rem;
+                margin-bottom: 1rem;
+
+                .lap-time {
+                  text-align: center;
+
+                  &.best-lap {
+                    color: #FFD700;
+                    .time {
+                      text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+                    }
+                  }
+
+                  .lap-number {
+                    color: #666;
+                    font-size: 0.8rem;
+                    display: block;
+                    margin-bottom: 0.25rem;
+                  }
+
+                  .time {
+                    color: #0ff;
+                    font-family: monospace;
+                    font-size: 1.1rem;
+                  }
+                }
+              }
+
+              .total-time {
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                padding-top: 1rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .label {
+                  color: #666;
+                }
+
+                .time {
+                  color: #0ff;
+                  font-family: monospace;
+                  font-size: 1.2rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .decorative-elements {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+
+    .corner {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border: 2px solid rgba(0, 255, 136, 0.2);
+
+      &.top-left {
+        top: 20px;
+        left: 20px;
+        border-right: none;
+        border-bottom: none;
+      }
+
+      &.top-right {
+        top: 20px;
+        right: 20px;
+        border-left: none;
+        border-bottom: none;
+      }
+
+      &.bottom-left {
+        bottom: 20px;
+        left: 20px;
+        border-right: none;
+        border-top: none;
+      }
+
+      &.bottom-right {
+        bottom: 20px;
+        right: 20px;
+        border-left: none;
+        border-top: none;
+      }
+    }
+
+    .grid-pattern {
+      position: absolute;
+      inset: 0;
+      background-image:
+              linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+      mask-image: radial-gradient(circle at center, black 30%, transparent 70%);
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow:
+            0 0 20px rgba(0, 255, 0, 0.5),
+            0 0 40px rgba(0, 255, 0, 0.3);
+  }
+  50% {
+    text-shadow:
+            0 0 25px rgba(0, 255, 0, 0.6),
+            0 0 50px rgba(0, 255, 0, 0.4);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.1; }
+  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.15; }
+}
+
+@keyframes floatTrophy {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@media (max-width: 1200px) {
+  .race-completion-screen {
+    .results-container {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .race-completion-screen {
+    padding: 1rem;
+
+    .completion-header .completion-title .text-line {
+      font-size: 3rem;
+    }
+
+    .results-container {
+      gap: 1rem;
+
+      .section-header {
+        h2 {
+          font-size: 1.5rem;
+        }
+      }
+    }
+
+    .result-card {
+      padding: 1rem;
+
+      .car-details .info .name {
+        font-size: 1rem;
+      }
+
+      .lap-times .times-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .race-completion-screen {
+    .completion-header .completion-title .text-line {
+      font-size: 2rem;
+    }
+
+    .trophy-animation {
+      .trophy-icon {
+        font-size: 100px;
+      }
+    }
+
+    .results-container {
+      .section-header .stats {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+
+    .result-card {
+      .position-indicator {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .lap-times .times-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 0 20px;
+
+  h3 {
+    color: #fff;
+    font-size: 1.5rem;
+    margin: 0;
+  }
+}
+
+.current-race {
+  padding: 20px 0;
+  background: rgba(0, 0, 0, 0.2);
+
+  .lap-status {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.1);
+    color: #666;
+
+    &.active {
+      background: rgba(0, 255, 136, 0.2);
+      color: #0f0;
+      animation: pulse 2s infinite;
+    }
+
+    &.completed {
+      background: rgba(0, 255, 0, 0.2);
+      color: #0f0;
+    }
+  }
+
+  .cars-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 20px;
+  }
+
+  .car-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    animation: slideIn 0.5s ease-out both;
+    animation-delay: var(--delay);
+
+    &:hover {
+      transform: translateX(5px);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    &.finished {
+      border-left: 3px solid #0f0;
+    }
+
+    .position {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 255, 136, 0.1);
+      border-radius: 50%;
+      color: #0f0;
+      font-weight: bold;
+    }
+
+    .car-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+
+      .car-info {
+        .car-name {
+          color: #fff;
+          font-weight: 500;
+          margin-bottom: 4px;
+        }
+
+        .car-speed {
+          color: #0ff;
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    .finish-time {
+      color: #0f0;
+      font-family: monospace;
+      font-size: 1.1rem;
+    }
+  }
+}
+
+.previous-laps {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+
+  .laps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+  }
+
+  .previous-lap {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 255, 136, 0.1);
+    }
+
+    .lap-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+
+      .lap-title {
+        color: #fff;
+        font-weight: 500;
+      }
+
+      .lap-distance {
+        color: #666;
+        font-size: 0.9rem;
+      }
+    }
+
+    .winner-info {
+      .winner-label {
+        color: #0f0;
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+      }
+
+      .winner-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .winner-car {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          color: #fff;
+        }
+
+        .winner-time {
+          color: #0ff;
+          font-family: monospace;
+        }
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 255, 136, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 136, 0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.car-list-enter-active,
+.car-list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.car-list-enter-from,
+.car-list-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+@media (max-width: 768px) {
+  .program-header {
+    padding: 15px;
+
+    .header-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+
+      .title {
+        font-size: 1.5rem;
+      }
+
+      .lap-info {
+        align-items: flex-start;
+      }
+    }
+  }
+
+  .section-title {
+    padding: 0 15px;
+
+    h3 {
+      font-size: 1.2rem;
+    }
+  }
+
+  .current-race .cars-list {
+    padding: 0 15px;
+  }
+
+  .car-card {
+    padding: 10px;
+
+    .car-content {
+      gap: 10px;
+
+      .car-info {
+        .car-name {
+          font-size: 0.9rem;
+        }
+        .car-speed {
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    .finish-time {
+      font-size: 0.9rem;
+    }
+  }
+
+  .race-completion-screen {
+    margin: 10px;
+    padding: 20px;
+
+    .completion-header .completion-title span {
+      font-size: 2.5rem;
+    }
+
+    .results-container .result-row {
+      grid-template-columns: 60px 1fr 140px;
+      gap: 16px;
+      padding: 12px 16px;
+    }
+
+    .results-container .result-row .rank-indicator {
+      gap: 8px;
+
+      .rank-number {
+        font-size: 1.5rem;
+      }
+
+      .rank-bar {
+        height: 24px;
+      }
+    }
+
+    .results-container .result-row .car-details {
+      gap: 12px;
+
+      .car-name {
+        font-size: 1.2rem;
+      }
+    }
+
+    .results-container .result-row .time-display .time-value {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .program-header .header-content {
+    .title {
+      font-size: 1.3rem;
+    }
+    .lap-info {
+      font-size: 0.9rem;
+    }
+  }
+
+  .current-race .car-card {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .position {
+      margin-bottom: 10px;
+    }
+
+    .finish-time {
+      margin-top: 10px;
+      align-self: flex-end;
+    }
+  }
+
+  .previous-laps .laps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .race-completion-screen {
+    margin: 10px;
+    padding: 15px;
+
+    .completion-header .completion-title span {
+      font-size: 2rem;
+    }
+
+    .results-container .result-row {
+      grid-template-columns: 50px 1fr 120px;
+      gap: 12px;
+      padding: 10px 12px;
+    }
+
+    .results-container .result-row .car-details {
+      gap: 8px;
+
+      .car-name {
+        font-size: 1rem;
+      }
+    }
+
+    .results-container .result-row .time-display .time-value {
+      font-size: 1rem;
+    }
+  }
+}
+
+@keyframes glow {
+  0% {
+    text-shadow:
+            0 0 20px rgba(0, 255, 0, 0.5),
+            0 0 40px rgba(0, 255, 0, 0.3);
+  }
+  100% {
+    text-shadow:
+            0 0 25px rgba(0, 255, 0, 0.6),
+            0 0 50px rgba(0, 255, 0, 0.4);
+  }
+}
+
+.car-details {
+  flex: 1;
+  min-width: 0;
+
+  .car-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .car-pill {
+      width: 8px;
+      height: 24px;
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .name-time {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .car-name {
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: #fff;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      }
+
+      .time-value {
+        font-family: 'Monaco', monospace;
+        font-size: 1.25rem;
+        color: #0ff;
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        letter-spacing: 0.05em;
+      }
+    }
+  }
+}

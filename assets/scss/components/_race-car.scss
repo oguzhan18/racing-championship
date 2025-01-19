@@ -1,0 +1,124 @@
+@use '../variables' as v;
+
+.race-car {
+  position: absolute;
+  transition: all 0.1s linear;
+
+  .car-body {
+    position: relative;
+    width: 100px;
+    height: 50px;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+
+    .car-model {
+      position: relative;
+      z-index: 2;
+    }
+
+    .car-effects {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+
+      .speed-lines {
+        position: absolute;
+        top: 50%;
+        right: 100%;
+        width: 80px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8));
+        opacity: 0.6;
+        transform-origin: right;
+        animation: speedLines 0.1s linear infinite;
+      }
+
+      .car-shadow {
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        height: 20px;
+        background: rgba(0, 0, 0, 0.4);
+        filter: blur(8px);
+        border-radius: 50%;
+        opacity: 0.6;
+      }
+
+      .nitro-effect {
+        position: absolute;
+        right: -20px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 15px;
+        background: radial-gradient(
+          circle at left,
+          rgba(0, 255, 255, 0.8),
+          transparent 70%
+        );
+        animation: nitroFlicker 0.2s ease-in-out infinite alternate;
+      }
+    }
+  }
+
+  .car-info {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -30px;
+    text-align: center;
+    min-width: 120px;
+
+    .car-name {
+      color: white;
+      font-size: 0.8rem;
+      margin-bottom: 2px;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    }
+
+    .car-speed {
+      color: v.$color-accent;
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    }
+
+    .position {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(v.$color-primary, 0.2);
+      color: v.$color-primary;
+      font-size: 0.8rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+  }
+}
+
+@keyframes speedLines {
+  0% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0.6;
+  }
+}
+
+@keyframes nitroFlicker {
+  0% {
+    opacity: 0.6;
+    transform: translateY(-50%) scaleX(0.9);
+  }
+  100% {
+    opacity: 0.8;
+    transform: translateY(-50%) scaleX(1.1);
+  }
+}
+

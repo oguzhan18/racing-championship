@@ -1,0 +1,98 @@
+@use 'variables' as v;
+@use 'mixins' as m;
+@use 'components/buttons';
+@use 'components/game-header';
+@use 'components/game-grid';
+@use 'components/race-info';
+@use 'components/welcome-modal';
+@use 'components/car-modal';
+@use 'components/car-list-modal';
+@use 'components/audio-player';
+@use 'components/enhanced-car-svg';
+@use 'components/program-list';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: v.$background-dark;
+  color: #fff;
+}
+
+.game-container {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.background-grid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+          linear-gradient(v.$neon-glow-primary 1px, transparent 1px),
+          linear-gradient(90deg, v.$neon-glow-primary 1px, transparent 1px);
+  background-size: 50px 50px;
+  transform: perspective(500px) rotateX(60deg);
+  transform-origin: top;
+  animation: gridMove 20s linear infinite;
+  opacity: 0.2;
+}
+
+@keyframes gridMove {
+  from { background-position: 0 0; }
+  to { background-position: 0 50px; }
+}
+
+.game-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  @include m.responsive(medium) {
+    padding: 1rem;
+  }
+}
+
+@include m.responsive(medium) {
+  .game-header {
+    flex-direction: column;
+    align-items: center;
+
+    .logo {
+      margin-bottom: 1rem;
+    }
+
+    .control-panel {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .game-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@include m.responsive(small) {
+  .game-header {
+    .logo .title {
+      font-size: map-get(v.$font-sizes, large);
+    }
+  }
+
+  .control-panel {
+    flex-direction: column;
+    align-items: center;
+  }
+}

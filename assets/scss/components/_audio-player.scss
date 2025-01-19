@@ -1,0 +1,97 @@
+.audio-controls {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.audio-button {
+  background: rgba(0, 13, 26, 0.9);
+  border: 2px solid rgba(0, 255, 136, 0.3);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+                    circle at center,
+                    rgba(0, 255, 136, 0.1),
+                    transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+    border-color: rgba(0, 255, 136, 0.5);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  .button-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .play-icon {
+    .triangle {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 12px 0 12px 20px;
+      border-color: transparent transparent transparent #0f0;
+      filter: drop-shadow(0 0 5px rgba(0, 255, 0, 0.5));
+    }
+  }
+
+  .playing-indicator {
+    .sound-wave {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 24px;
+
+      .bar {
+        width: 3px;
+        height: 100%;
+        background: #0f0;
+        border-radius: 3px;
+        animation: soundWave 1s ease-in-out infinite;
+        filter: drop-shadow(0 0 5px rgba(0, 255, 0, 0.5));
+
+        @for $i from 1 through 4 {
+          &:nth-child(#{$i}) {
+            animation-delay: #{$i * 0.1}s;
+          }
+        }
+      }
+    }
+  }
+
+  &.is-playing {
+    border-color: rgba(0, 255, 136, 0.5);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+  }
+}
+
+@keyframes soundWave {
+  0%, 100% { height: 6px; }
+  50% { height: 24px; }
+}
