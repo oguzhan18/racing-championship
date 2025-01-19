@@ -39,6 +39,8 @@ export default {
 
 
   // Auto import components: https://go.nuxtjs.dev/config-components
+  components: true,
+  // Auto import components
   components: {
     dirs: [
       '~/components'
@@ -69,9 +71,8 @@ export default {
       }
     }
   },
-  ssr: false,  // SSR'yi kapatın çünkü statik mod kullanıyorsunuz
-  target: 'static',  
-  generate: {
-    dir: 'dist'  // Statik dosyalar dist dizinine üretilecek
-  }
+  ssr: true,
+
+  // Target: static or server
+  target: 'server'
 }
