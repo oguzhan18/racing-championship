@@ -146,5 +146,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/assets/scss/components/_welcome-modal.scss';
+@use '@/assets/scss/components/_welcome-modal.scss';
 </style>

@@ -164,15 +164,15 @@
         <g class="speed-lines">
           <line
               v-for="i in 3"
-              :key="`speed-${i}`"
-              :x1="width * (0.1 - i * 0.1)"
-              :y1="height * 0.4"
-              :x2="width * (0.2 - i * 0.1)"
-              :y2="height * 0.4"
-              stroke="rgba(255,255,255,0.7)"
+              :key="`line-${i}`"
+              :x1="-width * 0.2"
+              :y1="height * (0.3 + i * 0.15)"
+              :x2="width * 0.1"
+              :y2="height * (0.3 + i * 0.15)"
+              :stroke="`url(#speedLines-${uniqueId})`"
               stroke-width="2"
-              :style="{
-              animation: `speedLine ${0.2 + i * 0.1}s infinite`,
+              :style="{ 
+              animation: `speedLine ${0.5 + i * 0.1}s infinite`,
               animationDelay: `${i * 0.1}s`
             }"
           />
@@ -182,13 +182,13 @@
           <circle
               v-for="i in 5"
               :key="`particle-${i}`"
-              :cx="width * (0.1 - Math.random() * 0.1)"
-              :cy="height * (0.4 + Math.random() * 0.2)"
-              :r="1 + Math.random() * 2"
+              :cx="width * (0.2 + Math.random() * 0.6)"
+              :cy="height * (0.3 + Math.random() * 0.4)"
+              :r="2"
               :fill="lightenColor(color, 50)"
               :style="{
-              animation: `particle ${0.5 + Math.random() * 0.5}s infinite`,
-              animationDelay: `${i * 0.1}s`
+              animation: `particle ${1 + Math.random()}s infinite`,
+              animationDelay: `${i * 0.2}s`
             }"
           />
         </g>

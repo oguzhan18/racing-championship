@@ -72,5 +72,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/assets/scss/components/_car-list-modal.scss';
+@use '@/assets/scss/components//_car-list-modal';
 </style>
